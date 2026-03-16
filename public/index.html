@@ -14,12 +14,44 @@
     <h1 style="color: rgb(25, 117, 79);">
         Turma 3AM1 — Gestão de Alunos</h1>
     
-    <ul>
-        <li>Ana</li>
-        <li>Bruno</li>
+    <ul id="lista">
+        
     </ul>
 
+    <h2>Cadastrar Alunos</h2>
+    <form id="cadastroForm">
+        <input type="text" id="nome" placeholder="Nome do Aluno" required>
+        <input type="number" id="idade" placeholder="Idade do Aluno" required>
+        <button type="submit">Cadastrar</button>
+    </form>
 
+    <script>
+        function carregarAluos() {
+            fecth('/alunos')
+                .then(res => res.json())
+                .then(alunos => {
+                    let html = '';
+                    alunos.forEach(aluno => {
+                        html += `<li>${aluno.nome} - ${alunos.idade} anos</li>`;
+                    });
+                    document.querySelector('ul').innerHTML = html;
+                });
+        }
+
+        document.getElementById('cadastroForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const idade = document.getElementById('idade').value;
+
+            fetch('/alunos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nome, idade })
+            })
+        });
+    </script>
 </body>
 
 </html>
